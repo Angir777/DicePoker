@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class StrifeManager : MonoBehaviour
 {
@@ -23,8 +24,18 @@ public class StrifeManager : MonoBehaviour
 
     private bool aiPassRound = false;
 
+    public Sprite pointForPlayer;
+    public Sprite pointForEnemy;
+    public Sprite draw;
+    public Sprite defeat;
+    public GameObject octObject;
+    private Image octImage;
+
     private void Start()
     {
+        octImage = octObject.GetComponent<Image>();
+
+
         // Ustawienie referencji do powiązanych skryptów
         instruction = FindObjectOfType<Instruction>().GetComponent<Instruction>();
         throwDices = FindObjectOfType<ThrowDices>().GetComponent<ThrowDices>();
@@ -190,11 +201,15 @@ public class StrifeManager : MonoBehaviour
             // Komunikat dla gracza o wygranej lub przegranej rundzie
             if (whoWinRound == "player")
             {
+                octImage.sprite = pointForPlayer;
+
                 // Wstrzymanie wykonywania kodu na 2 sekundy i rozpoczęcie nowej rundy
                 StartCoroutine(ExecuteAfterDelayShowModal(2.0f, "You won this round!", "StartNewRound"));
             }
             else if (whoWinRound == "computer")
             {
+                octImage.sprite = pointForEnemy;
+
                 // Wstrzymanie wykonywania kodu na 2 sekundy i rozpoczęcie nowej rundy
                 StartCoroutine(ExecuteAfterDelayShowModal(2.0f, "You lost this round!", "StartNewRound"));
             }
@@ -244,6 +259,8 @@ public class StrifeManager : MonoBehaviour
             {
                 modalPanel.ShowModalPanel("You won the game!", "EndGame");
             }
+
+            octImage.sprite = draw;
         }
         else if (computerWins > playerWins)
         {
@@ -258,6 +275,8 @@ public class StrifeManager : MonoBehaviour
             {
                 modalPanel.ShowModalPanel("You lost the game!", "EndGame");
             }
+
+            octImage.sprite = defeat;
         }
 
         // Ustaw zaktualizowaną wartość dla "money"
